@@ -18,13 +18,36 @@ print(data[0])
 languages = ("japanese", "chinese", "english","french")
 language = input("Choose your langauge (japanese, chinese, english, french)")
 if language not in languages:
-    print("That language is not in the list. Please continue. ")
+    print("That language is not in the list. Please try again. ")
+    input("Choose your langauge (japanese, chinese, english, french)")
 else:
     for pokemon in data:
         print(pokemon["name"][language])
 
-print("Select the type of pokemon you are interested in.")
-print(pokemon["types"])
+def find_pokemon_by_type(pokemon_list, selected_type):
+    selected_type = selected_type.strip().casefold()
 
+    return [
+        pokemon
+        for pokemon in pokemon_list
+        if selected_type in (kind.casefold() for kind in pokemon["type"])
+    ]
+selected_type = input("Enter a Pokémon type: ").strip()
+
+if selected_type:
+    matches = find_pokemon_by_type(data, selected_type)
+
+    if matches:
+        for pokemon in matches:
+            print(pokemon["name"][language])
+    else:
+        print(f"No Pokémon found with the type '{selected_type}'.")
+        input("Enter a Pokémon type: ").strip()
+        if selected_type:
+            matches = find_pokemon_by_type(data, selected_type)
+
+        if matches:
+            for pokemon in matches:
+                print(pokemon["name"][language])
 
 
