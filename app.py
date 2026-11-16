@@ -16,38 +16,31 @@ print(data[0])
 
 #Based on user input, show all moves that a pokemon could learn based on their type. For example, if Charizard is fire/fyling, show all fire and flying moves. HINT import the moves.json file too!
 languages = ("japanese", "chinese", "english","french")
-language = input("Choose your langauge (japanese, chinese, english, french)")
-if language not in languages:
-    print("That language is not in the list. Please try again. ")
-    input("Choose your langauge (japanese, chinese, english, french)")
-else:
+while True:
+    language = input("Choose your language (japanese, chinese, english, french)").strip().lower()
+    if language in languages:
+        break
+    print("That language is not in the list. Please try again.")
+
+while True:
+    selected_type = input("Enter a Pokémon type: ").strip().casefold()
+    if not selected_type:
+        print("Please enter a type.")
+        continue
+
+    matches = []
     for pokemon in data:
-        print(pokemon["name"][language])
+        for kind in pokemon["type"]:
+            if selected_type == kind.casefold():
+                matches.append(pokemon)
+                break
 
-def find_pokemon_by_type(pokemon_list, selected_type):
-    selected_type = selected_type.strip().casefold()
-
-    return [
-        pokemon
-        for pokemon in pokemon_list
-        if selected_type in (kind.casefold() for kind in pokemon["type"])
-    ]
-selected_type = input("Enter a Pokémon type: ").strip()
-
-if selected_type:
-    matches = find_pokemon_by_type(data, selected_type)
-
-    if matches:
-        for pokemon in matches:
-            print(pokemon["name"][language])
-    else:
+    if not matches:
         print(f"No Pokémon found with the type '{selected_type}'.")
-        input("Enter a Pokémon type: ").strip()
-        if selected_type:
-            matches = find_pokemon_by_type(data, selected_type)
+        continue
 
-        if matches:
-            for pokemon in matches:
-                print(pokemon["name"][language])
+    for pokemon in matches:
+        print(pokemon["name"][language])
+    break
 
 
